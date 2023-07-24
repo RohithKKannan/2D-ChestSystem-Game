@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ChestSystem.Generics
 {
-    public class GenericSingleton<T> : MonoBehaviour where T : GenericSingleton<T>
+    public class GenericMonoSingleton<T> : MonoBehaviour where T : GenericMonoSingleton<T>
     {
         private static T instance = null;
         public static T Instance { get { return instance; } }
