@@ -12,7 +12,8 @@ namespace ChestSystem.Chest
         {
             chestModel = new ChestModel(chestData);
             chestView = GameObject.Instantiate<ChestView>(chestData.chestPrefab);
-            chestView.transform.SetParent(chestContainer);
+            chestView.transform.position = Vector3.zero;
+            chestView.transform.SetParent(chestContainer, false);
 
             chestModel.SetChestController(this);
             chestView.SetChestController(this);

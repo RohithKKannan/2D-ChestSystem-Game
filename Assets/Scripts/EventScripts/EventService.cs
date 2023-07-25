@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 
 namespace ChestSystem.Events
@@ -16,11 +17,11 @@ namespace ChestSystem.Events
             }
         }
 
-        public event Action OnCreateChest;
+        public event Action<Transform> OnCreateChest;
 
-        public void InvokeOnCreateChest()
+        public void InvokeOnCreateChest(Transform chestHolder)
         {
-            OnCreateChest?.Invoke();
+            OnCreateChest?.Invoke(chestHolder);
         }
     }
 }

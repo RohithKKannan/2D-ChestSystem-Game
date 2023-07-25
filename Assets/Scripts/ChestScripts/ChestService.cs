@@ -24,17 +24,17 @@ namespace ChestSystem.Chest
             EventService.Instance.OnCreateChest += CreateRandomChest;
         }
 
-        private void CreateRandomChest()
+        private void CreateRandomChest(Transform chestHolder)
         {
-            if (chestControllers.Count == numberOfSlots)
+            if (chestControllers.Count == numberOfSlots || chestHolder == null)
                 return;
-            CreateChest((ChestType)Random.Range(0, chestScriptableObjectList.chests.Length));
+            CreateChest((ChestType)Random.Range(0, chestScriptableObjectList.chests.Length), chestHolder);
         }
 
-        public void CreateChest(ChestType chestType)
+        public void CreateChest(ChestType chestType, Transform chestHolder)
         {
             ChestScriptableObject chestData = chestScriptableObjectList.chests[(int)chestType];
-            ChestController newChestController = new ChestController(chestData, chestContainer);
+            ChestController newChestController = new ChestController(chestData, chestHolder);
             chestControllers.Add(newChestController);
         }
 
