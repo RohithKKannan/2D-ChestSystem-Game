@@ -7,7 +7,7 @@ namespace ChestSystem.Chest
     {
         protected ChestView chestView;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             chestView = GetComponent<ChestView>();
         }
