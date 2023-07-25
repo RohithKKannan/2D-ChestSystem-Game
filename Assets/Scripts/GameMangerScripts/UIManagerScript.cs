@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using ChestSystem.Events;
-using ChestSystem.Currency;
 
 namespace ChestSystem.UI
 {
