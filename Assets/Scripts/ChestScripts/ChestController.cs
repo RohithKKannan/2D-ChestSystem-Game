@@ -21,6 +21,9 @@ namespace ChestSystem.Chest
 
         public void OpenChest()
         {
+            int coinReward = Random.Range(chestModel.minCoins, chestModel.maxCoins + 1);
+            int gemReward = Random.Range(chestModel.minGems, chestModel.maxGems + 1);
+            ChestService.Instance.AddCurrency(coinReward, gemReward);
             ChestService.Instance.DestroyChest(this);
         }
     }

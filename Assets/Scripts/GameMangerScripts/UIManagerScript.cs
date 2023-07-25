@@ -28,6 +28,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
         }
 
+        /*
         public void AddCoins()
         {
             CurrencyService.Instance.AddCoins(2500);
@@ -47,6 +48,7 @@ namespace ChestSystem.UI
         {
             CurrencyService.Instance.RemoveGems(10);
         }
+        */
 
         public Transform GetChestHolder()
         {

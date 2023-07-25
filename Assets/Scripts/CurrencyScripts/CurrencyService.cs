@@ -9,10 +9,13 @@ namespace ChestSystem.Currency
         private int coins;
         private int gems;
 
+        [SerializeField] private int baseCoins = 5000;
+        [SerializeField] private int baseGems = 10;
+
         private void Start()
         {
-            coins = 0;
-            gems = 0;
+            coins = baseCoins;
+            gems = baseGems;
             EventService.Instance.InvokeOnUpdateCoinCount(coins);
             EventService.Instance.InvokeOnUpdateGemCount(gems);
         }
@@ -30,7 +33,6 @@ namespace ChestSystem.Currency
 
             coins -= coinCount;
             EventService.Instance.InvokeOnUpdateCoinCount(coins);
-
             return true;
         }
 
@@ -47,7 +49,6 @@ namespace ChestSystem.Currency
 
             gems -= gemCount;
             EventService.Instance.InvokeOnUpdateGemCount(gems);
-
             return true;
         }
     }
