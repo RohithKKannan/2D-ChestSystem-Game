@@ -4,7 +4,7 @@ namespace ChestSystem.Chest
 {
     public class ChestLockedState : ChestState
     {
-        [SerializeField] private GameObject lockedPanel;
+        private GameObject lockedPanel;
 
         protected override void Awake()
         {
@@ -25,6 +25,13 @@ namespace ChestSystem.Chest
             base.OnStateExit();
 
             lockedPanel.SetActive(false);
+        }
+
+        public override void OnChestClick()
+        {
+            base.OnChestClick();
+
+            chestView.ChangeChestState(chestView.chestUnlockingState);
         }
     }
 }

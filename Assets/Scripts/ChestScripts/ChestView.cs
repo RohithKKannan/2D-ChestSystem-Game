@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ChestSystem.Chest
 {
@@ -15,9 +16,12 @@ namespace ChestSystem.Chest
 
         [Header("State Serialize Fields")]
         [SerializeField] private GameObject lockedPanel;
+        [SerializeField] private GameObject unlockingPanel;
+        [SerializeField] private TMP_Text timerText;
 
         [Header("States")]
-        [SerializeField] private ChestLockedState chestLockedState;
+        public ChestLockedState chestLockedState;
+        public ChestUnlockingState chestUnlockingState;
 
         private void Start()
         {
@@ -35,9 +39,24 @@ namespace ChestSystem.Chest
             return lockedPanel;
         }
 
+        public GameObject GetUnlockingPanel()
+        {
+            return unlockingPanel;
+        }
+
+        public TMP_Text GetTimerText()
+        {
+            return timerText;
+        }
+
+        public float GetTimeToOpenChest()
+        {
+            return chestController.GetTimeToOpen();
+        }
+
         public void ClickedOnChest()
         {
-            chestController.OpenChest();
+            currentChestState.OnChestClick();
         }
 
         public void ChangeChestState(ChestState newChestState)
@@ -47,6 +66,11 @@ namespace ChestSystem.Chest
 
             currentChestState = newChestState;
             currentChestState.OnStateEnter();
+        }
+
+        private void Update()
+        {
+            currentChestState.Tick();
         }
     }
 }

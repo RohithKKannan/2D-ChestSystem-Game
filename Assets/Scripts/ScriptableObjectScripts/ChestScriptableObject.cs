@@ -17,7 +17,7 @@ namespace ChestSystem.ScriptableObjects
         public int maxGems;
 
         [Header("Timer")]
-        public int timeToOpen;
+        public float timeToOpen;
 
         public ChestView chestPrefab;
     }

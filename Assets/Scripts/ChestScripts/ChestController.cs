@@ -26,5 +26,10 @@ namespace ChestSystem.Chest
             ChestService.Instance.AddCurrency(coinReward, gemReward);
             ChestService.Instance.DestroyChest(this);
         }
+
+        public float GetTimeToOpen()
+        {
+            return chestModel.timeToOpen;
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace ChestSystem.Chest
         public int maxCoins { get; }
         public int minGems { get; }
         public int maxGems { get; }
-        public int timeToOpen { get; }
+        public float timeToOpen { get; }
         public ChestType chestType { get; }
 
         private ChestController chestController;

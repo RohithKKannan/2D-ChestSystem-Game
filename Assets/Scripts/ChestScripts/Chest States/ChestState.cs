@@ -22,6 +22,8 @@ namespace ChestSystem.Chest
             this.enabled = false;
         }
 
+        public virtual void OnChestClick() { }
+
         public virtual void Tick() { }
     }
 }

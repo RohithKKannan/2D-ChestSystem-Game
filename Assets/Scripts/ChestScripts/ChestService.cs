@@ -18,7 +18,6 @@ namespace ChestSystem.Chest
 
         [SerializeField] private int numberOfSlots = 4;
         [SerializeField] private ChestScriptableObjectList chestScriptableObjectList;
-        [SerializeField] private Transform chestContainer;
 
         private void Start()
         {
