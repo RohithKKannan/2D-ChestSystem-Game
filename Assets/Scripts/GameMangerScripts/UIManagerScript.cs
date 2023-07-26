@@ -20,7 +20,12 @@ namespace ChestSystem.UI
 
         [Header("Confirm Unlock")]
         [SerializeField] private GameObject confirmUnlockPanel;
-        [SerializeField] private TMP_Text gemText;
+        [SerializeField] private TMP_Text gemCountText;
+        [SerializeField] private TMP_Text timerText;
+
+        [Header("Confirm Unlock with gems")]
+        [SerializeField] private GameObject confirmUnlockWithGemsPanel;
+        [SerializeField] private TMP_Text gemUnlockWithGemsText;
 
         [Header("Insufficient Gems Popup")]
         [SerializeField] private GameObject insufficientGemsPopup;
@@ -44,6 +49,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateCoinCount += UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
+            EventService.Instance.OnCheckConfirmGemsUnlock += UnlockChestWithGemsPopUp;
             EventService.Instance.OnInsufficientGems += InsufficientGems;
             EventService.Instance.OnRewardReceived += EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
@@ -75,15 +81,39 @@ namespace ChestSystem.UI
             gemCount.text = gemCountValue.ToString();
         }
 
-        public void UnlockChestPopUp(int gemCount)
+        public void UnlockChestPopUp(int gemCount, string timer)
         {
-            gemText.text = "Unlock chest with " + gemCount + " gems?";
+            gemCountText.text = gemCount.ToString();
+            timerText.text = timer;
             confirmUnlockPanel.SetActive(true);
+        }
+
+        public void UnlockChestWithGemsPopUp(int gemCount)
+        {
+            gemUnlockWithGemsText.text = "Unlock chest with " + gemCount + " gems?";
+            confirmUnlockWithGemsPanel.SetActive(true);
         }
 
         public void CloseUnlockChestPopUp()
         {
             confirmUnlockPanel.SetActive(false);
+        }
+
+        public void UnlockChestWithTimer()
+        {
+            EventService.Instance.InvokeOnUnlockWithTimer();
+            CloseUnlockChestPopUp();
+        }
+
+        public void UnlockChestWithGems()
+        {
+            EventService.Instance.InvokeOnUnlockWithGems();
+            CloseUnlockChestPopUp();
+        }
+
+        public void CloseUnlockChestWithGemsPopUp()
+        {
+            confirmUnlockWithGemsPanel.SetActive(false);
         }
 
         public void InsufficientGems()
@@ -98,13 +128,13 @@ namespace ChestSystem.UI
 
         public void ConfirmUnlock()
         {
-            CloseUnlockChestPopUp();
+            CloseUnlockChestWithGemsPopUp();
             EventService.Instance.InvokeOnConfirmUnlock();
         }
 
         public void DenyUnlock()
         {
-            CloseUnlockChestPopUp();
+            CloseUnlockChestWithGemsPopUp();
             EventService.Instance.InvokeOnDenyUnlock();
         }
 
@@ -151,6 +181,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
+            EventService.Instance.OnCheckConfirmGemsUnlock -= UnlockChestWithGemsPopUp;
             EventService.Instance.OnInsufficientGems -= InsufficientGems;
             EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;

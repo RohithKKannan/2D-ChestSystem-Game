@@ -46,7 +46,7 @@ namespace ChestSystem.Chest
         {
             base.OnChestClick();
 
-            EventService.Instance.InvokeOnCheckConfirmUnlock(gemCost);
+            EventService.Instance.InvokeOnCheckConfirmGemsUnlock(gemCost);
             EventService.Instance.OnConfirmUnlock += UnlockChestWithGems;
             EventService.Instance.OnDenyUnlock += UnlockDenied;
         }
