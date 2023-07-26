@@ -61,6 +61,11 @@ namespace ChestSystem.Chest
         {
             if (CurrencyService.Instance.RemoveGems(gemCost))
                 UnlockChest();
+            else
+                EventService.Instance.InvokeOnInsufficientGems();
+
+            EventService.Instance.OnConfirmUnlock -= UnlockChestWithGems;
+            EventService.Instance.OnDenyUnlock -= UnlockDenied;
         }
 
         public void UnlockDenied()

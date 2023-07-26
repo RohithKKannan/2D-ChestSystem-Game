@@ -19,6 +19,9 @@ namespace ChestSystem.UI
         [SerializeField] private GameObject confirmUnlockPanel;
         [SerializeField] private TMP_Text gemText;
 
+        [Header("Insufficient Gems Popup")]
+        [SerializeField] private GameObject insufficientGemsPopup;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -30,6 +33,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateCoinCount += UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
+            EventService.Instance.OnInsufficientGems += InsufficientGems;
         }
 
         /*
@@ -91,6 +95,16 @@ namespace ChestSystem.UI
             confirmUnlockPanel.SetActive(false);
         }
 
+        public void InsufficientGems()
+        {
+            insufficientGemsPopup.SetActive(true);
+        }
+
+        public void CloseInsufficientGems()
+        {
+            insufficientGemsPopup.SetActive(false);
+        }
+
         public void ConfirmUnlock()
         {
             CloseUnlockChestPopUp();
@@ -108,6 +122,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
+            EventService.Instance.OnInsufficientGems -= InsufficientGems;
         }
     }
 }

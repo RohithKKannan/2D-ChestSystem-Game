@@ -23,6 +23,7 @@ namespace ChestSystem.Events
         public event Action<int> OnCheckConfirmUnlock;
         public event Action OnConfirmUnlock;
         public event Action OnDenyUnlock;
+        public event Action OnInsufficientGems;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -52,6 +53,11 @@ namespace ChestSystem.Events
         public void InvokeOnDenyUnlock()
         {
             OnDenyUnlock.Invoke();
+        }
+
+        public void InvokeOnInsufficientGems()
+        {
+            OnInsufficientGems.Invoke();
         }
     }
 }
