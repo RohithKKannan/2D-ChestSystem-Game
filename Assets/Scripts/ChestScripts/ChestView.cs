@@ -18,6 +18,7 @@ namespace ChestSystem.Chest
         [SerializeField] private GameObject lockedPanel;
         [SerializeField] private GameObject unlockingPanel;
         [SerializeField] private TMP_Text timerText;
+        [SerializeField] private TMP_Text gemCountText;
 
         [Header("States")]
         public ChestLockedState chestLockedState;
@@ -47,6 +48,11 @@ namespace ChestSystem.Chest
         public TMP_Text GetTimerText()
         {
             return timerText;
+        }
+
+        public TMP_Text GetGemCountText()
+        {
+            return gemCountText;
         }
 
         public float GetTimeToOpenChest()

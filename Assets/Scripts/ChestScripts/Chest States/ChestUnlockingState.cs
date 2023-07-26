@@ -5,11 +5,13 @@ namespace ChestSystem.Chest
 {
     public class ChestUnlockingState : ChestState
     {
-        [SerializeField] private float timeToUnlock;
+        private float timeToUnlock;
         private bool timerIsRunning;
+        private int gemCost;
 
         private GameObject unlockingPanel;
         private TMP_Text timerText;
+        private TMP_Text gemCostText;
 
         protected override void Awake()
         {
@@ -17,6 +19,7 @@ namespace ChestSystem.Chest
 
             unlockingPanel = chestView.GetUnlockingPanel();
             timerText = chestView.GetTimerText();
+            gemCostText = chestView.GetGemCountText();
         }
 
         public override void OnStateEnter()
@@ -44,6 +47,18 @@ namespace ChestSystem.Chest
             timerText.text = string.Format("{0:00}:{1:00}:{2:00}", hours, minutes, seconds);
         }
 
+        private void FindGemCost(float time)
+        {
+            time += 1;
+            float minutes = Mathf.FloorToInt(time / 60);
+            gemCost = Mathf.CeilToInt(minutes / 10);
+        }
+
+        private void SetGemCostText()
+        {
+            gemCostText.text = gemCost.ToString();
+        }
+
         public override void Tick()
         {
             base.Tick();
@@ -55,6 +70,8 @@ namespace ChestSystem.Chest
             {
                 timeToUnlock -= Time.deltaTime;
                 DisplayTime(timeToUnlock);
+                FindGemCost(timeToUnlock);
+                SetGemCostText();
             }
             else
             {
