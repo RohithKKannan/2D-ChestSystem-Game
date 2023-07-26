@@ -89,6 +89,16 @@ namespace ChestSystem.Chest
             chestController.ChestOpened();
         }
 
+        public bool GetChestUnlockProcess()
+        {
+            return chestController.GetChestUnlockProcess();
+        }
+
+        public void SetChestUnlockProcess(bool isUnlocking)
+        {
+            chestController.SetChestUnlockProcess(isUnlocking);
+        }
+
         public void ChangeChestState(ChestState newChestState)
         {
             if (currentChestState != null)

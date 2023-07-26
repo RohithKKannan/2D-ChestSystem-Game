@@ -29,6 +29,16 @@ namespace ChestSystem.Chest
             return chestModel.chestRewards;
         }
 
+        public bool GetChestUnlockProcess()
+        {
+            return ChestService.Instance.GetChestUnlockProcess();
+        }
+
+        public void SetChestUnlockProcess(bool isUnlocking)
+        {
+            ChestService.Instance.SetChestUnlockProcess(isUnlocking);
+        }
+
         public float GetTimeToOpen()
         {
             return chestModel.timeToOpen;

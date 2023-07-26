@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using ChestSystem.Events;
@@ -7,6 +8,8 @@ namespace ChestSystem.UI
     public class UIManagerScript : MonoBehaviour
     {
         private Transform[] chestHolders;
+        private Coroutine textFadeCoroutine;
+        private bool coroutineRunning;
 
         [Header("Currency")]
         [SerializeField] private TMP_Text coinCount;
@@ -27,6 +30,9 @@ namespace ChestSystem.UI
         [SerializeField] private TMP_Text coinRewardCount;
         [SerializeField] private TMP_Text gemRewardCount;
 
+        [Header("Errors")]
+        [SerializeField] private CanvasGroup errorChestAlreadyOpening;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -40,29 +46,8 @@ namespace ChestSystem.UI
             EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
             EventService.Instance.OnInsufficientGems += InsufficientGems;
             EventService.Instance.OnRewardReceived += EnableRewardsPopup;
+            EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
         }
-
-        /*
-        public void AddCoins()
-        {
-            CurrencyService.Instance.AddCoins(2500);
-        }
-
-        public void AddGems()
-        {
-            CurrencyService.Instance.AddGems(10);
-        }
-
-        public void RemoveCoins()
-        {
-            CurrencyService.Instance.RemoveCoins(2500);
-        }
-
-        public void RemoveGems()
-        {
-            CurrencyService.Instance.RemoveGems(10);
-        }
-        */
 
         public Transform GetChestHolder()
         {
@@ -136,6 +121,31 @@ namespace ChestSystem.UI
             EventService.Instance.InvokeOnRewardAccepted();
         }
 
+        public void ChestAlreadyBeingOpened()
+        {
+            if (coroutineRunning)
+            {
+                StopCoroutine(textFadeCoroutine);
+                coroutineRunning = false;
+            }
+            textFadeCoroutine = StartCoroutine(BeginFade());
+        }
+
+        private IEnumerator BeginFade()
+        {
+            errorChestAlreadyOpening.alpha = 1;
+            coroutineRunning = true;
+            yield return new WaitForSeconds(2f);
+
+            while (errorChestAlreadyOpening.alpha > 0)
+            {
+                errorChestAlreadyOpening.alpha -= 0.5f * Time.deltaTime;
+                yield return null;
+            }
+            errorChestAlreadyOpening.alpha = 0;
+            coroutineRunning = false;
+        }
+
         private void OnDestroy()
         {
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
@@ -143,6 +153,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
             EventService.Instance.OnInsufficientGems -= InsufficientGems;
             EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
+            EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;
         }
     }
 }

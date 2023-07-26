@@ -28,6 +28,7 @@ namespace ChestSystem.Chest
         {
             base.OnStateEnter();
 
+            chestView.SetChestUnlockProcess(true);
             timeToUnlock = chestView.GetTimeToOpenChest();
             timerIsRunning = true;
             unlockingPanel.SetActive(true);
@@ -37,6 +38,7 @@ namespace ChestSystem.Chest
         {
             base.OnStateExit();
 
+            chestView.SetChestUnlockProcess(false);
             unlockingPanel.SetActive(false);
         }
 

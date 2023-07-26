@@ -1,4 +1,5 @@
 using UnityEngine;
+using ChestSystem.Events;
 
 namespace ChestSystem.Chest
 {
@@ -31,7 +32,11 @@ namespace ChestSystem.Chest
         {
             base.OnChestClick();
 
-            chestView.ChangeChestState(chestView.chestUnlockingState);
+            // if no other chest is unlocking, then unlock
+            if (!chestView.GetChestUnlockProcess())
+                chestView.ChangeChestState(chestView.chestUnlockingState);
+            else
+                EventService.Instance.InvokeOnErrorAlreadyUnlocking();
         }
     }
 }

@@ -26,6 +26,7 @@ namespace ChestSystem.Events
         public event Action OnInsufficientGems;
         public event Action<int, int> OnRewardReceived;
         public event Action OnRewardAccepted;
+        public event Action OnErrorAlreadyUnlocking;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -70,6 +71,11 @@ namespace ChestSystem.Events
         public void InvokeOnRewardAccepted()
         {
             OnRewardAccepted?.Invoke();
+        }
+
+        public void InvokeOnErrorAlreadyUnlocking()
+        {
+            OnErrorAlreadyUnlocking?.Invoke();
         }
     }
 }

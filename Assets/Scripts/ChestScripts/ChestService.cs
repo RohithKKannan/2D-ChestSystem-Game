@@ -15,6 +15,7 @@ namespace ChestSystem.Chest
     public class ChestService : GenericMonoSingleton<ChestService>
     {
         private List<ChestController> chestControllers = new();
+        private bool chestUnlockingInProcess;
 
         [SerializeField] private int numberOfSlots = 4;
         [SerializeField] private ChestScriptableObjectList chestScriptableObjectList;
@@ -48,6 +49,16 @@ namespace ChestSystem.Chest
         {
             chestControllers.Remove(chestController);
             GameObject.Destroy(chestController.chestView.gameObject);
+        }
+
+        public bool GetChestUnlockProcess()
+        {
+            return chestUnlockingInProcess;
+        }
+
+        public void SetChestUnlockProcess(bool isUnlocking)
+        {
+            chestUnlockingInProcess = isUnlocking;
         }
 
         private void OnDestroy()
