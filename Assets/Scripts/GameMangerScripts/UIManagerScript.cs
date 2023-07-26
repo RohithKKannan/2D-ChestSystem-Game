@@ -38,6 +38,9 @@ namespace ChestSystem.UI
         [Header("Errors")]
         [SerializeField] private CanvasGroup errorChestAlreadyOpening;
 
+        [Header("Slots are full")]
+        [SerializeField] private GameObject slotsAreFullPopup;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -53,6 +56,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnInsufficientGems += InsufficientGems;
             EventService.Instance.OnRewardReceived += EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
+            EventService.Instance.OnSlotsAreFull += EnableSlotsAreFullPopUp;
         }
 
         public Transform GetChestHolder()
@@ -126,6 +130,16 @@ namespace ChestSystem.UI
             insufficientGemsPopup.SetActive(false);
         }
 
+        public void EnableSlotsAreFullPopUp()
+        {
+            slotsAreFullPopup.SetActive(true);
+        }
+
+        public void DisableSlotsAreFullPopUp()
+        {
+            slotsAreFullPopup.SetActive(false);
+        }
+
         public void ConfirmUnlock()
         {
             CloseUnlockChestWithGemsPopUp();
@@ -185,6 +199,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnInsufficientGems -= InsufficientGems;
             EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;
+            EventService.Instance.OnSlotsAreFull -= EnableSlotsAreFullPopUp;
         }
     }
 }

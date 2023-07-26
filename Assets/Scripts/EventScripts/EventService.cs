@@ -30,6 +30,7 @@ namespace ChestSystem.Events
         public event Action OnErrorAlreadyUnlocking;
         public event Action OnUnlockWithTimer;
         public event Action OnUnlockWithGems;
+        public event Action OnSlotsAreFull;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -94,6 +95,11 @@ namespace ChestSystem.Events
         public void InvokeOnUnlockWithGems()
         {
             OnUnlockWithGems?.Invoke();
+        }
+
+        public void InvokeOnSlotsAreFull()
+        {
+            OnSlotsAreFull?.Invoke();
         }
     }
 }

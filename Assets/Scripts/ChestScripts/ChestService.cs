@@ -28,7 +28,10 @@ namespace ChestSystem.Chest
         private void CreateRandomChest(Transform chestHolder)
         {
             if (chestControllers.Count == numberOfSlots || chestHolder == null)
+            {
+                EventService.Instance.InvokeOnSlotsAreFull();
                 return;
+            }
             CreateChest((ChestType)Random.Range(0, chestScriptableObjectList.chests.Length), chestHolder);
         }
 
