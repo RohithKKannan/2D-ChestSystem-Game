@@ -2545,7 +2545,7 @@ MonoBehaviour:
   rewardsPopup: {fileID: 241973477}
   coinRewardCount: {fileID: 460821998}
   gemRewardCount: {fileID: 868605362}
-  errorChestAlreadyOpening: {fileID: 1738406221}
+  errorChestAlreadyOpening: {fileID: 1738406224}
 --- !u!1 &868605361
 GameObject:
   m_ObjectHideFlags: 0
@@ -5413,7 +5413,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1738406220}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0

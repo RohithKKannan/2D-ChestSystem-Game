@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using ChestSystem.Events;
 
 namespace ChestSystem.Chest
@@ -8,12 +9,16 @@ namespace ChestSystem.Chest
         private int coinReward;
         private int gemReward;
         private GameObject chestOpenedPanel;
+        private Image imageHolder;
+        private Sprite chestOpenedImage;
 
         protected override void Awake()
         {
             base.Awake();
 
             chestOpenedPanel = chestView.GetOpenedPanel();
+            imageHolder = chestView.GetImageHolder();
+            chestOpenedImage = chestView.GetChestOpenedImage();
         }
 
         public override void OnStateEnter()
@@ -26,6 +31,9 @@ namespace ChestSystem.Chest
         public override void OnChestClick()
         {
             base.OnChestClick();
+
+            imageHolder.sprite = chestOpenedImage;
+            chestOpenedPanel.SetActive(false);
 
             ChestRewards chestRewards = chestView.GetChestRewardsFromController();
             coinReward = Random.Range(chestRewards.minCoins, chestRewards.maxCoins + 1);

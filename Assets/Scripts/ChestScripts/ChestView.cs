@@ -59,6 +59,16 @@ namespace ChestSystem.Chest
             return chestOpenedPanel;
         }
 
+        public Image GetImageHolder()
+        {
+            return imageHolder;
+        }
+
+        public Sprite GetChestOpenedImage()
+        {
+            return chestOpenedImage;
+        }
+
         public TMP_Text GetTimerText()
         {
             return timerText;
