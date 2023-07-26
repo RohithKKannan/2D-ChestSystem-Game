@@ -15,6 +15,10 @@ namespace ChestSystem.UI
         [Header("Chest Container")]
         [SerializeField] private Transform chestContainer;
 
+        [Header("Confirm Unlock")]
+        [SerializeField] private GameObject confirmUnlockPanel;
+        [SerializeField] private TMP_Text gemText;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -25,6 +29,7 @@ namespace ChestSystem.UI
 
             EventService.Instance.OnUpdateCoinCount += UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
+            EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
         }
 
         /*
@@ -75,10 +80,34 @@ namespace ChestSystem.UI
             gemCount.text = gemCountValue.ToString();
         }
 
+        public void UnlockChestPopUp(int gemCount)
+        {
+            gemText.text = "Unlock chest with " + gemCount + " gems?";
+            confirmUnlockPanel.SetActive(true);
+        }
+
+        public void CloseUnlockChestPopUp()
+        {
+            confirmUnlockPanel.SetActive(false);
+        }
+
+        public void ConfirmUnlock()
+        {
+            CloseUnlockChestPopUp();
+            EventService.Instance.InvokeOnConfirmUnlock();
+        }
+
+        public void DenyUnlock()
+        {
+            CloseUnlockChestPopUp();
+            EventService.Instance.InvokeOnDenyUnlock();
+        }
+
         private void OnDestroy()
         {
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
+            EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
         }
     }
 }

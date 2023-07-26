@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using ChestSystem.Events;
+using ChestSystem.Currency;
 
 namespace ChestSystem.Chest
 {
@@ -38,6 +40,42 @@ namespace ChestSystem.Chest
             unlockingPanel.SetActive(false);
         }
 
+        public override void OnChestClick()
+        {
+            base.OnChestClick();
+
+            EventService.Instance.InvokeOnCheckConfirmUnlock(gemCost);
+            EventService.Instance.OnConfirmUnlock += UnlockChestWithGems;
+            EventService.Instance.OnDenyUnlock += UnlockDenied;
+        }
+
+        public void UpdateTimeAndGemCount()
+        {
+            timeToUnlock -= Time.deltaTime;
+            DisplayTime(timeToUnlock);
+            FindGemCost(timeToUnlock);
+            SetGemCostText();
+        }
+
+        public void UnlockChestWithGems()
+        {
+            if (CurrencyService.Instance.RemoveGems(gemCost))
+                UnlockChest();
+        }
+
+        public void UnlockDenied()
+        {
+            EventService.Instance.OnConfirmUnlock -= UnlockChestWithGems;
+            EventService.Instance.OnDenyUnlock -= UnlockDenied;
+        }
+
+        public void UnlockChest()
+        {
+            Debug.Log("Chest unlocked!");
+            timeToUnlock = 0;
+            timerIsRunning = false;
+        }
+
         private void DisplayTime(float time)
         {
             time += 1;
@@ -67,17 +105,9 @@ namespace ChestSystem.Chest
                 return;
 
             if (timeToUnlock > 0)
-            {
-                timeToUnlock -= Time.deltaTime;
-                DisplayTime(timeToUnlock);
-                FindGemCost(timeToUnlock);
-                SetGemCostText();
-            }
+                UpdateTimeAndGemCount();
             else
-            {
-                timeToUnlock = 0;
-                timerIsRunning = false;
-            }
+                UnlockChest();
         }
     }
 }

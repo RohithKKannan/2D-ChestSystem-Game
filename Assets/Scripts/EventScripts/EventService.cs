@@ -20,6 +20,9 @@ namespace ChestSystem.Events
         public event Action<Transform> OnCreateChest;
         public event Action<int> OnUpdateCoinCount;
         public event Action<int> OnUpdateGemCount;
+        public event Action<int> OnCheckConfirmUnlock;
+        public event Action OnConfirmUnlock;
+        public event Action OnDenyUnlock;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -34,6 +37,21 @@ namespace ChestSystem.Events
         public void InvokeOnUpdateGemCount(int gemCount)
         {
             OnUpdateGemCount?.Invoke(gemCount);
+        }
+
+        public void InvokeOnCheckConfirmUnlock(int gemCount)
+        {
+            OnCheckConfirmUnlock?.Invoke(gemCount);
+        }
+
+        public void InvokeOnConfirmUnlock()
+        {
+            OnConfirmUnlock.Invoke();
+        }
+
+        public void InvokeOnDenyUnlock()
+        {
+            OnDenyUnlock.Invoke();
         }
     }
 }
