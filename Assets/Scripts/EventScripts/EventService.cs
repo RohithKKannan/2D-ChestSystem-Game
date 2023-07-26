@@ -24,6 +24,8 @@ namespace ChestSystem.Events
         public event Action OnConfirmUnlock;
         public event Action OnDenyUnlock;
         public event Action OnInsufficientGems;
+        public event Action<int, int> OnRewardReceived;
+        public event Action OnRewardAccepted;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -47,17 +49,27 @@ namespace ChestSystem.Events
 
         public void InvokeOnConfirmUnlock()
         {
-            OnConfirmUnlock.Invoke();
+            OnConfirmUnlock?.Invoke();
         }
 
         public void InvokeOnDenyUnlock()
         {
-            OnDenyUnlock.Invoke();
+            OnDenyUnlock?.Invoke();
         }
 
         public void InvokeOnInsufficientGems()
         {
-            OnInsufficientGems.Invoke();
+            OnInsufficientGems?.Invoke();
+        }
+
+        public void InvokeOnRewardReceived(int coinCount, int gemCount)
+        {
+            OnRewardReceived?.Invoke(coinCount, gemCount);
+        }
+
+        public void InvokeOnRewardAccepted()
+        {
+            OnRewardAccepted?.Invoke();
         }
     }
 }

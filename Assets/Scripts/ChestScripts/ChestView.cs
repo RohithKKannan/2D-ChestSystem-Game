@@ -19,10 +19,19 @@ namespace ChestSystem.Chest
         [SerializeField] private GameObject unlockingPanel;
         [SerializeField] private TMP_Text timerText;
         [SerializeField] private TMP_Text gemCountText;
+        [SerializeField] private GameObject chestOpenedPanel;
 
         [Header("States")]
         public ChestLockedState chestLockedState;
         public ChestUnlockingState chestUnlockingState;
+        public ChestOpenedState chestOpenedState;
+
+        private void Awake()
+        {
+            chestLockedState = GetComponent<ChestLockedState>();
+            chestUnlockingState = GetComponent<ChestUnlockingState>();
+            chestOpenedState = GetComponent<ChestOpenedState>();
+        }
 
         private void Start()
         {
@@ -45,6 +54,11 @@ namespace ChestSystem.Chest
             return unlockingPanel;
         }
 
+        public GameObject GetOpenedPanel()
+        {
+            return chestOpenedPanel;
+        }
+
         public TMP_Text GetTimerText()
         {
             return timerText;
@@ -55,6 +69,11 @@ namespace ChestSystem.Chest
             return gemCountText;
         }
 
+        public ChestRewards GetChestRewardsFromController()
+        {
+            return chestController.GetChestRewards();
+        }
+
         public float GetTimeToOpenChest()
         {
             return chestController.GetTimeToOpen();
@@ -63,6 +82,11 @@ namespace ChestSystem.Chest
         public void ClickedOnChest()
         {
             currentChestState.OnChestClick();
+        }
+
+        public void ChestCollected()
+        {
+            chestController.ChestOpened();
         }
 
         public void ChangeChestState(ChestState newChestState)

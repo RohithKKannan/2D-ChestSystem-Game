@@ -76,9 +76,9 @@ namespace ChestSystem.Chest
 
         public void UnlockChest()
         {
-            Debug.Log("Chest unlocked!");
             timeToUnlock = 0;
             timerIsRunning = false;
+            chestView.ChangeChestState(chestView.chestOpenedState);
         }
 
         private void DisplayTime(float time)

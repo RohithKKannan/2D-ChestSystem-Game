@@ -22,6 +22,11 @@ namespace ChestSystem.UI
         [Header("Insufficient Gems Popup")]
         [SerializeField] private GameObject insufficientGemsPopup;
 
+        [Header("Rewards Popup")]
+        [SerializeField] private GameObject rewardsPopup;
+        [SerializeField] private TMP_Text coinRewardCount;
+        [SerializeField] private TMP_Text gemRewardCount;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -34,6 +39,7 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
             EventService.Instance.OnInsufficientGems += InsufficientGems;
+            EventService.Instance.OnRewardReceived += EnableRewardsPopup;
         }
 
         /*
@@ -117,12 +123,26 @@ namespace ChestSystem.UI
             EventService.Instance.InvokeOnDenyUnlock();
         }
 
+        public void EnableRewardsPopup(int coinCount, int gemCount)
+        {
+            coinRewardCount.text = coinCount.ToString();
+            gemRewardCount.text = gemCount.ToString();
+            rewardsPopup.SetActive(true);
+        }
+
+        public void AcceptRewards()
+        {
+            rewardsPopup.SetActive(false);
+            EventService.Instance.InvokeOnRewardAccepted();
+        }
+
         private void OnDestroy()
         {
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
             EventService.Instance.OnInsufficientGems -= InsufficientGems;
+            EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
         }
     }
 }
