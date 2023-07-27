@@ -41,6 +41,12 @@ namespace ChestSystem.UI
         [Header("Slots are full")]
         [SerializeField] private GameObject slotsAreFullPopup;
 
+        [Header("Queue is full")]
+        [SerializeField] private GameObject queueIsFullPopup;
+
+        [Header("Chest already in queue")]
+        [SerializeField] private GameObject chestAlreadyInQueuePopup;
+
         private void Awake()
         {
             chestHolders = new Transform[chestContainer.childCount];
@@ -57,6 +63,8 @@ namespace ChestSystem.UI
             EventService.Instance.OnRewardReceived += EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
             EventService.Instance.OnSlotsAreFull += EnableSlotsAreFullPopUp;
+            EventService.Instance.OnChestQueueFull += EnableQueueIsFullPopUp;
+            EventService.Instance.OnQueueContainsChest += EnableChestAlreadyInQueue;
         }
 
         public Transform GetChestHolder()
@@ -140,6 +148,26 @@ namespace ChestSystem.UI
             slotsAreFullPopup.SetActive(false);
         }
 
+        public void EnableQueueIsFullPopUp()
+        {
+            queueIsFullPopup.SetActive(true);
+        }
+
+        public void DisableQueueIsFullPopup()
+        {
+            queueIsFullPopup.SetActive(false);
+        }
+
+        public void EnableChestAlreadyInQueue()
+        {
+            chestAlreadyInQueuePopup.SetActive(true);
+        }
+
+        public void DisableChestAlreadyInQueue()
+        {
+            chestAlreadyInQueuePopup.SetActive(false);
+        }
+
         public void ConfirmUnlock()
         {
             CloseUnlockChestWithGemsPopUp();
@@ -200,6 +228,8 @@ namespace ChestSystem.UI
             EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;
             EventService.Instance.OnSlotsAreFull -= EnableSlotsAreFullPopUp;
+            EventService.Instance.OnChestQueueFull -= EnableQueueIsFullPopUp;
+            EventService.Instance.OnQueueContainsChest -= EnableChestAlreadyInQueue;
         }
     }
 }

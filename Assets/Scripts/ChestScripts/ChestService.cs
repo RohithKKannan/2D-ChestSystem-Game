@@ -14,15 +14,18 @@ namespace ChestSystem.Chest
 
     public class ChestService : GenericMonoSingleton<ChestService>
     {
+        private Queue<ChestController> chestQueue = new();
         private List<ChestController> chestControllers = new();
         private bool chestUnlockingInProcess;
 
         [SerializeField] private int numberOfSlots = 4;
+        [SerializeField] private int queueLength = 2;
         [SerializeField] private ChestScriptableObjectList chestScriptableObjectList;
 
         private void Start()
         {
             EventService.Instance.OnCreateChest += CreateRandomChest;
+            EventService.Instance.OnOpenNextChestInQueue += OpenNextChestInQueue;
         }
 
         private void CreateRandomChest(Transform chestHolder)
@@ -64,9 +67,34 @@ namespace ChestSystem.Chest
             chestUnlockingInProcess = isUnlocking;
         }
 
+        public void AddChestToQueue(ChestController chestController)
+        {
+            if (chestQueue.Count < queueLength)
+                chestQueue.Enqueue(chestController);
+            else
+                EventService.Instance.InvokeOnChestQueueFull();
+        }
+
+        public bool CheckIfChestAlreadyInQueue(ChestController chestController)
+        {
+            return chestQueue.Contains(chestController);
+        }
+
+        public void OpenNextChestInQueue()
+        {
+            Debug.Log("Chest Queue count : " + chestQueue.Count);
+
+            if (chestQueue.Count == 0)
+                return;
+
+            ChestController chestController = chestQueue.Dequeue();
+            chestController.ChangeChestStateToUnlocking();
+        }
+
         private void OnDestroy()
         {
             EventService.Instance.OnCreateChest -= CreateRandomChest;
+            EventService.Instance.OnOpenNextChestInQueue -= OpenNextChestInQueue;
         }
     }
 }

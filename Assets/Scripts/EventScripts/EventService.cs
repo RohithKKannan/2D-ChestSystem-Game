@@ -31,6 +31,10 @@ namespace ChestSystem.Events
         public event Action OnUnlockWithTimer;
         public event Action OnUnlockWithGems;
         public event Action OnSlotsAreFull;
+        public event Action OnOpenNextChestInQueue;
+        public event Action OnQueueContainsChest;
+        public event Action OnChestQueueFull;
+        public event Action OnChestQueueEmpty;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -100,6 +104,26 @@ namespace ChestSystem.Events
         public void InvokeOnSlotsAreFull()
         {
             OnSlotsAreFull?.Invoke();
+        }
+
+        public void InvokeOnOpenNextChestInQueue()
+        {
+            OnOpenNextChestInQueue?.Invoke();
+        }
+
+        public void InvokeOnQueueContainsChest()
+        {
+            OnQueueContainsChest?.Invoke();
+        }
+
+        public void InvokeOnChestQueueFull()
+        {
+            OnChestQueueFull?.Invoke();
+        }
+
+        public void InvokeOnChestQueueEmpty()
+        {
+            OnChestQueueEmpty?.Invoke();
         }
     }
 }

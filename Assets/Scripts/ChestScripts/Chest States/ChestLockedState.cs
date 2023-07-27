@@ -74,6 +74,8 @@ namespace ChestSystem.Chest
             EventService.Instance.OnUnlockWithGems -= GemsBasedUnlock;
             EventService.Instance.OnUnlockWithTimer -= TimerBasedUnlock;
 
+            Debug.Log("Immediate unlock with gems!");
+
             if (CurrencyService.Instance.RemoveGems(gemCost))
                 chestView.ChangeChestState(chestView.chestOpenedState);
             else
@@ -84,11 +86,13 @@ namespace ChestSystem.Chest
         {
             base.OnChestClick();
 
-            // if no other chest is unlocking, then unlock
+            // if no other chest is unlocking, then unlock, else add to queue
             if (!chestView.GetChestUnlockProcess())
                 UnlockChest();
+            else if (chestView.CheckIfChestAlreadyInQueue())
+                EventService.Instance.InvokeOnQueueContainsChest();
             else
-                EventService.Instance.InvokeOnErrorAlreadyUnlocking();
+                chestView.AddChestToQueue();
         }
     }
 }

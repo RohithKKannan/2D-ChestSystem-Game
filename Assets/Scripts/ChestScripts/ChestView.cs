@@ -109,8 +109,20 @@ namespace ChestSystem.Chest
             chestController.SetChestUnlockProcess(isUnlocking);
         }
 
+        public void AddChestToQueue()
+        {
+            chestController.AddChestToQueue();
+        }
+
+        public bool CheckIfChestAlreadyInQueue()
+        {
+            return chestController.CheckIfChestAlreadyInQueue();
+        }
+
         public void ChangeChestState(ChestState newChestState)
         {
+            Debug.Log("Changing states!");
+
             if (currentChestState != null)
                 currentChestState.OnStateExit();
 

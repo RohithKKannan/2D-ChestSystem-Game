@@ -38,6 +38,8 @@ namespace ChestSystem.Chest
         {
             base.OnStateExit();
 
+            Debug.Log("Unlocking state exit!");
+
             chestView.SetChestUnlockProcess(false);
             unlockingPanel.SetActive(false);
         }
@@ -62,7 +64,10 @@ namespace ChestSystem.Chest
         public void UnlockChestWithGems()
         {
             if (CurrencyService.Instance.RemoveGems(gemCost))
+            {
+                Debug.Log("Chest unlocking -> unlock with gems!");
                 UnlockChest();
+            }
             else
                 EventService.Instance.InvokeOnInsufficientGems();
 
