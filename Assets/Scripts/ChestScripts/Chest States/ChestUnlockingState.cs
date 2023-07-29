@@ -62,7 +62,9 @@ namespace ChestSystem.Chest
         public void UnlockChestWithGems()
         {
             if (CurrencyService.Instance.RemoveGems(gemCost))
+            {
                 UnlockChest();
+            }
             else
                 EventService.Instance.InvokeOnInsufficientGems();
 
@@ -97,6 +99,8 @@ namespace ChestSystem.Chest
             time += 1;
             float minutes = Mathf.FloorToInt(time / 60);
             gemCost = Mathf.CeilToInt(minutes / 10);
+            if (gemCost == 0)
+                gemCost = 1;
         }
 
         private void SetGemCostText()

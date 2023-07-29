@@ -27,9 +27,6 @@ namespace ChestSystem.UI
         [SerializeField] private GameObject confirmUnlockWithGemsPanel;
         [SerializeField] private TMP_Text gemUnlockWithGemsText;
 
-        [Header("Insufficient Gems Popup")]
-        [SerializeField] private GameObject insufficientGemsPopup;
-
         [Header("Rewards Popup")]
         [SerializeField] private GameObject rewardsPopup;
         [SerializeField] private TMP_Text coinRewardCount;
@@ -38,8 +35,9 @@ namespace ChestSystem.UI
         [Header("Errors")]
         [SerializeField] private CanvasGroup errorChestAlreadyOpening;
 
-        [Header("Slots are full")]
-        [SerializeField] private GameObject slotsAreFullPopup;
+        [Header("Okay PopUp")]
+        [SerializeField] private GameObject okayPopup;
+        [SerializeField] private TMP_Text okayText;
 
         private void Awake()
         {
@@ -53,10 +51,9 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
             EventService.Instance.OnCheckConfirmGemsUnlock += UnlockChestWithGemsPopUp;
-            EventService.Instance.OnInsufficientGems += InsufficientGems;
             EventService.Instance.OnRewardReceived += EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
-            EventService.Instance.OnSlotsAreFull += EnableSlotsAreFullPopUp;
+            EventService.Instance.OnOkayPopUp += EnableOkayPopUp;
         }
 
         public Transform GetChestHolder()
@@ -120,24 +117,15 @@ namespace ChestSystem.UI
             confirmUnlockWithGemsPanel.SetActive(false);
         }
 
-        public void InsufficientGems()
+        public void EnableOkayPopUp(string text)
         {
-            insufficientGemsPopup.SetActive(true);
+            okayText.text = text;
+            okayPopup.SetActive(true);
         }
 
-        public void CloseInsufficientGems()
+        public void DisableOkayPopUp()
         {
-            insufficientGemsPopup.SetActive(false);
-        }
-
-        public void EnableSlotsAreFullPopUp()
-        {
-            slotsAreFullPopup.SetActive(true);
-        }
-
-        public void DisableSlotsAreFullPopUp()
-        {
-            slotsAreFullPopup.SetActive(false);
+            okayPopup.SetActive(false);
         }
 
         public void ConfirmUnlock()
@@ -196,10 +184,9 @@ namespace ChestSystem.UI
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
             EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
             EventService.Instance.OnCheckConfirmGemsUnlock -= UnlockChestWithGemsPopUp;
-            EventService.Instance.OnInsufficientGems -= InsufficientGems;
             EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
             EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;
-            EventService.Instance.OnSlotsAreFull -= EnableSlotsAreFullPopUp;
+            EventService.Instance.OnOkayPopUp -= EnableOkayPopUp;
         }
     }
 }

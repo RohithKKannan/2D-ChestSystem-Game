@@ -37,6 +37,8 @@ namespace ChestSystem.Chest
         {
             float minutes = Mathf.FloorToInt((timeToUnlock + 1) / 60);
             gemCost = Mathf.CeilToInt(minutes / 10);
+            if (gemCost == 0)
+                gemCost = 1;
         }
 
         public override void OnStateEnter()
@@ -84,11 +86,18 @@ namespace ChestSystem.Chest
         {
             base.OnChestClick();
 
-            // if no other chest is unlocking, then unlock
+            // if no other chest is unlocking, then unlock, else add to queue
             if (!chestView.GetChestUnlockProcess())
                 UnlockChest();
+            else if (chestView.CheckIfChestAlreadyInQueue())
+                EventService.Instance.InvokeOnQueueContainsChest();
+            else if (chestView.CheckIfQueueIsFull())
+                EventService.Instance.InvokeOnChestQueueFull();
             else
-                EventService.Instance.InvokeOnErrorAlreadyUnlocking();
+            {
+                chestView.EnableQueueText();
+                chestView.AddChestToQueue();
+            }
         }
     }
 }

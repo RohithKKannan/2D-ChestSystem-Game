@@ -25,6 +25,7 @@ namespace ChestSystem.Chest
         {
             base.OnStateEnter();
 
+            EventService.Instance.InvokeOnOpenNextChestInQueue();
             chestOpenedPanel.SetActive(true);
         }
 

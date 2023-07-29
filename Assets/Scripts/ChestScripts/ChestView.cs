@@ -16,6 +16,7 @@ namespace ChestSystem.Chest
 
         [Header("State Serialize Fields")]
         [SerializeField] private GameObject lockedPanel;
+        [SerializeField] private GameObject inQueueText;
         [SerializeField] private GameObject unlockingPanel;
         [SerializeField] private TMP_Text timerText;
         [SerializeField] private TMP_Text gemCountText;
@@ -107,6 +108,26 @@ namespace ChestSystem.Chest
         public void SetChestUnlockProcess(bool isUnlocking)
         {
             chestController.SetChestUnlockProcess(isUnlocking);
+        }
+
+        public void EnableQueueText()
+        {
+            inQueueText.SetActive(true);
+        }
+
+        public void AddChestToQueue()
+        {
+            chestController.AddChestToQueue();
+        }
+
+        public bool CheckIfChestAlreadyInQueue()
+        {
+            return chestController.CheckIfChestAlreadyInQueue();
+        }
+
+        public bool CheckIfQueueIsFull()
+        {
+            return chestController.CheckIfQueueIsFull();
         }
 
         public void ChangeChestState(ChestState newChestState)

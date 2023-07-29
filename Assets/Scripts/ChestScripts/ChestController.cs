@@ -43,5 +43,25 @@ namespace ChestSystem.Chest
         {
             return chestModel.timeToOpen;
         }
+
+        public void AddChestToQueue()
+        {
+            ChestService.Instance.AddChestToQueue(this);
+        }
+
+        public bool CheckIfChestAlreadyInQueue()
+        {
+            return ChestService.Instance.CheckIfChestAlreadyInQueue(this);
+        }
+
+        public bool CheckIfQueueIsFull()
+        {
+            return ChestService.Instance.CheckIfQueueIsFull();
+        }
+
+        public void ChangeChestStateToUnlocking()
+        {
+            chestView.ChangeChestState(chestView.chestUnlockingState);
+        }
     }
 }
