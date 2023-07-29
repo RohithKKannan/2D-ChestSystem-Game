@@ -8,20 +8,24 @@ namespace ChestSystem.Chest
         public ChestModel chestModel { get; }
         public ChestView chestView { get; }
 
-        public ChestController(ChestScriptableObject chestData, Transform chestContainer)
+        public ChestController(ChestScriptableObject chestData)
         {
             chestModel = new ChestModel(chestData);
             chestView = GameObject.Instantiate<ChestView>(chestData.chestPrefab);
             chestView.transform.position = Vector3.zero;
-            chestView.transform.SetParent(chestContainer, false);
 
             chestModel.SetChestController(this);
             chestView.SetChestController(this);
         }
 
+        private void SetChestParent(Transform parent)
+        {
+            chestView.transform.SetParent(parent, false);
+        }
+
         public void ChestOpened()
         {
-            ChestService.Instance.DestroyChest(this);
+            ChestService.Instance.DestroyChest(this, chestModel.chestType);
         }
 
         public ChestRewards GetChestRewards()
@@ -62,6 +66,21 @@ namespace ChestSystem.Chest
         public void ChangeChestStateToUnlocking()
         {
             chestView.ChangeChestState(chestView.chestUnlockingState);
+        }
+
+        public void EnableChest(Transform parent)
+        {
+            SetChestParent(parent);
+            chestView.gameObject.SetActive(true);
+        }
+
+        public void DisableChest()
+        {
+            SetChestParent(null);
+            chestView.ChangeChestState(chestView.chestLockedState);
+            chestView.GetImageHolder().sprite = chestView.GetChestClosedImage();
+            chestView.DisableQueueText();
+            chestView.gameObject.SetActive(false);
         }
     }
 }
