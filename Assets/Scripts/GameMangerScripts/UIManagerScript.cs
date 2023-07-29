@@ -1,5 +1,7 @@
 using UnityEngine;
+using TMPro;
 using ChestSystem.Events;
+using ChestSystem.Currency;
 
 namespace ChestSystem.UI
 {
@@ -7,6 +9,11 @@ namespace ChestSystem.UI
     {
         private Transform[] chestHolders;
 
+        [Header("Currency")]
+        [SerializeField] private TMP_Text coinCount;
+        [SerializeField] private TMP_Text gemCount;
+
+        [Header("Chest Container")]
         [SerializeField] private Transform chestContainer;
 
         private void Awake()
@@ -16,7 +23,32 @@ namespace ChestSystem.UI
             {
                 chestHolders[i] = chestContainer.GetChild(i);
             }
+
+            EventService.Instance.OnUpdateCoinCount += UpdateCoinCount;
+            EventService.Instance.OnUpdateGemCount += UpdateGemCount;
         }
+
+        /*
+        public void AddCoins()
+        {
+            CurrencyService.Instance.AddCoins(2500);
+        }
+
+        public void AddGems()
+        {
+            CurrencyService.Instance.AddGems(10);
+        }
+
+        public void RemoveCoins()
+        {
+            CurrencyService.Instance.RemoveCoins(2500);
+        }
+
+        public void RemoveGems()
+        {
+            CurrencyService.Instance.RemoveGems(10);
+        }
+        */
 
         public Transform GetChestHolder()
         {
@@ -32,6 +64,22 @@ namespace ChestSystem.UI
         {
             Transform chestHolder = GetChestHolder();
             EventService.Instance.InvokeOnCreateChest(chestHolder);
+        }
+
+        public void UpdateCoinCount(int coinCountValue)
+        {
+            coinCount.text = coinCountValue.ToString();
+        }
+
+        public void UpdateGemCount(int gemCountValue)
+        {
+            gemCount.text = gemCountValue.ToString();
+        }
+
+        private void OnDestroy()
+        {
+            EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
+            EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
         }
     }
 }

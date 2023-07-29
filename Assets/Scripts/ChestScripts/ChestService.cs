@@ -3,6 +3,7 @@ using UnityEngine;
 using ChestSystem.Generics;
 using ChestSystem.ScriptableObjects;
 using ChestSystem.Events;
+using ChestSystem.Currency;
 
 namespace ChestSystem.Chest
 {
@@ -36,6 +37,12 @@ namespace ChestSystem.Chest
             ChestScriptableObject chestData = chestScriptableObjectList.chests[(int)chestType];
             ChestController newChestController = new ChestController(chestData, chestHolder);
             chestControllers.Add(newChestController);
+        }
+
+        public void AddCurrency(int coinCount, int gemCount)
+        {
+            CurrencyService.Instance.AddCoins(coinCount);
+            CurrencyService.Instance.AddGems(gemCount);
         }
 
         public void DestroyChest(ChestController chestController)

@@ -18,10 +18,22 @@ namespace ChestSystem.Events
         }
 
         public event Action<Transform> OnCreateChest;
+        public event Action<int> OnUpdateCoinCount;
+        public event Action<int> OnUpdateGemCount;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
             OnCreateChest?.Invoke(chestHolder);
+        }
+
+        public void InvokeOnUpdateCoinCount(int coinCount)
+        {
+            OnUpdateCoinCount?.Invoke(coinCount);
+        }
+
+        public void InvokeOnUpdateGemCount(int gemCount)
+        {
+            OnUpdateGemCount?.Invoke(gemCount);
         }
     }
 }
