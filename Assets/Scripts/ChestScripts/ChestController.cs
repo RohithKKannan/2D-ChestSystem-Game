@@ -19,12 +19,29 @@ namespace ChestSystem.Chest
             chestView.SetChestController(this);
         }
 
-        public void OpenChest()
+        public void ChestOpened()
         {
-            int coinReward = Random.Range(chestModel.minCoins, chestModel.maxCoins + 1);
-            int gemReward = Random.Range(chestModel.minGems, chestModel.maxGems + 1);
-            ChestService.Instance.AddCurrency(coinReward, gemReward);
             ChestService.Instance.DestroyChest(this);
+        }
+
+        public ChestRewards GetChestRewards()
+        {
+            return chestModel.chestRewards;
+        }
+
+        public bool GetChestUnlockProcess()
+        {
+            return ChestService.Instance.GetChestUnlockProcess();
+        }
+
+        public void SetChestUnlockProcess(bool isUnlocking)
+        {
+            ChestService.Instance.SetChestUnlockProcess(isUnlocking);
+        }
+
+        public float GetTimeToOpen()
+        {
+            return chestModel.timeToOpen;
         }
     }
 }

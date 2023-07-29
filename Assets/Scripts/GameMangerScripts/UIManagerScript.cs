@@ -1,13 +1,15 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 using ChestSystem.Events;
-using ChestSystem.Currency;
 
 namespace ChestSystem.UI
 {
     public class UIManagerScript : MonoBehaviour
     {
         private Transform[] chestHolders;
+        private Coroutine textFadeCoroutine;
+        private bool coroutineRunning;
 
         [Header("Currency")]
         [SerializeField] private TMP_Text coinCount;
@@ -15,6 +17,29 @@ namespace ChestSystem.UI
 
         [Header("Chest Container")]
         [SerializeField] private Transform chestContainer;
+
+        [Header("Confirm Unlock")]
+        [SerializeField] private GameObject confirmUnlockPanel;
+        [SerializeField] private TMP_Text gemCountText;
+        [SerializeField] private TMP_Text timerText;
+
+        [Header("Confirm Unlock with gems")]
+        [SerializeField] private GameObject confirmUnlockWithGemsPanel;
+        [SerializeField] private TMP_Text gemUnlockWithGemsText;
+
+        [Header("Insufficient Gems Popup")]
+        [SerializeField] private GameObject insufficientGemsPopup;
+
+        [Header("Rewards Popup")]
+        [SerializeField] private GameObject rewardsPopup;
+        [SerializeField] private TMP_Text coinRewardCount;
+        [SerializeField] private TMP_Text gemRewardCount;
+
+        [Header("Errors")]
+        [SerializeField] private CanvasGroup errorChestAlreadyOpening;
+
+        [Header("Slots are full")]
+        [SerializeField] private GameObject slotsAreFullPopup;
 
         private void Awake()
         {
@@ -26,29 +51,13 @@ namespace ChestSystem.UI
 
             EventService.Instance.OnUpdateCoinCount += UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount += UpdateGemCount;
+            EventService.Instance.OnCheckConfirmUnlock += UnlockChestPopUp;
+            EventService.Instance.OnCheckConfirmGemsUnlock += UnlockChestWithGemsPopUp;
+            EventService.Instance.OnInsufficientGems += InsufficientGems;
+            EventService.Instance.OnRewardReceived += EnableRewardsPopup;
+            EventService.Instance.OnErrorAlreadyUnlocking += ChestAlreadyBeingOpened;
+            EventService.Instance.OnSlotsAreFull += EnableSlotsAreFullPopUp;
         }
-
-        /*
-        public void AddCoins()
-        {
-            CurrencyService.Instance.AddCoins(2500);
-        }
-
-        public void AddGems()
-        {
-            CurrencyService.Instance.AddGems(10);
-        }
-
-        public void RemoveCoins()
-        {
-            CurrencyService.Instance.RemoveCoins(2500);
-        }
-
-        public void RemoveGems()
-        {
-            CurrencyService.Instance.RemoveGems(10);
-        }
-        */
 
         public Transform GetChestHolder()
         {
@@ -76,10 +85,121 @@ namespace ChestSystem.UI
             gemCount.text = gemCountValue.ToString();
         }
 
+        public void UnlockChestPopUp(int gemCount, string timer)
+        {
+            gemCountText.text = gemCount.ToString();
+            timerText.text = timer;
+            confirmUnlockPanel.SetActive(true);
+        }
+
+        public void UnlockChestWithGemsPopUp(int gemCount)
+        {
+            gemUnlockWithGemsText.text = "Unlock chest with " + gemCount + " gems?";
+            confirmUnlockWithGemsPanel.SetActive(true);
+        }
+
+        public void CloseUnlockChestPopUp()
+        {
+            confirmUnlockPanel.SetActive(false);
+        }
+
+        public void UnlockChestWithTimer()
+        {
+            EventService.Instance.InvokeOnUnlockWithTimer();
+            CloseUnlockChestPopUp();
+        }
+
+        public void UnlockChestWithGems()
+        {
+            EventService.Instance.InvokeOnUnlockWithGems();
+            CloseUnlockChestPopUp();
+        }
+
+        public void CloseUnlockChestWithGemsPopUp()
+        {
+            confirmUnlockWithGemsPanel.SetActive(false);
+        }
+
+        public void InsufficientGems()
+        {
+            insufficientGemsPopup.SetActive(true);
+        }
+
+        public void CloseInsufficientGems()
+        {
+            insufficientGemsPopup.SetActive(false);
+        }
+
+        public void EnableSlotsAreFullPopUp()
+        {
+            slotsAreFullPopup.SetActive(true);
+        }
+
+        public void DisableSlotsAreFullPopUp()
+        {
+            slotsAreFullPopup.SetActive(false);
+        }
+
+        public void ConfirmUnlock()
+        {
+            CloseUnlockChestWithGemsPopUp();
+            EventService.Instance.InvokeOnConfirmUnlock();
+        }
+
+        public void DenyUnlock()
+        {
+            CloseUnlockChestWithGemsPopUp();
+            EventService.Instance.InvokeOnDenyUnlock();
+        }
+
+        public void EnableRewardsPopup(int coinCount, int gemCount)
+        {
+            coinRewardCount.text = coinCount.ToString();
+            gemRewardCount.text = gemCount.ToString();
+            rewardsPopup.SetActive(true);
+        }
+
+        public void AcceptRewards()
+        {
+            rewardsPopup.SetActive(false);
+            EventService.Instance.InvokeOnRewardAccepted();
+        }
+
+        public void ChestAlreadyBeingOpened()
+        {
+            if (coroutineRunning)
+            {
+                StopCoroutine(textFadeCoroutine);
+                coroutineRunning = false;
+            }
+            textFadeCoroutine = StartCoroutine(BeginFade());
+        }
+
+        private IEnumerator BeginFade()
+        {
+            errorChestAlreadyOpening.alpha = 1;
+            coroutineRunning = true;
+            yield return new WaitForSeconds(2f);
+
+            while (errorChestAlreadyOpening.alpha > 0)
+            {
+                errorChestAlreadyOpening.alpha -= 0.5f * Time.deltaTime;
+                yield return null;
+            }
+            errorChestAlreadyOpening.alpha = 0;
+            coroutineRunning = false;
+        }
+
         private void OnDestroy()
         {
             EventService.Instance.OnUpdateCoinCount -= UpdateCoinCount;
             EventService.Instance.OnUpdateGemCount -= UpdateGemCount;
+            EventService.Instance.OnCheckConfirmUnlock -= UnlockChestPopUp;
+            EventService.Instance.OnCheckConfirmGemsUnlock -= UnlockChestWithGemsPopUp;
+            EventService.Instance.OnInsufficientGems -= InsufficientGems;
+            EventService.Instance.OnRewardReceived -= EnableRewardsPopup;
+            EventService.Instance.OnErrorAlreadyUnlocking -= ChestAlreadyBeingOpened;
+            EventService.Instance.OnSlotsAreFull -= EnableSlotsAreFullPopUp;
         }
     }
 }

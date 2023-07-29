@@ -1,20 +1,42 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace ChestSystem.Chest
 {
     public class ChestView : MonoBehaviour
     {
         private ChestController chestController;
+        private ChestState currentChestState;
 
         [SerializeField] private Image imageHolder;
         [SerializeField] private ChestType chestType;
         [SerializeField] private Sprite chestClosedImage;
         [SerializeField] private Sprite chestOpenedImage;
 
+        [Header("State Serialize Fields")]
+        [SerializeField] private GameObject lockedPanel;
+        [SerializeField] private GameObject unlockingPanel;
+        [SerializeField] private TMP_Text timerText;
+        [SerializeField] private TMP_Text gemCountText;
+        [SerializeField] private GameObject chestOpenedPanel;
+
+        [Header("States")]
+        public ChestLockedState chestLockedState;
+        public ChestUnlockingState chestUnlockingState;
+        public ChestOpenedState chestOpenedState;
+
+        private void Awake()
+        {
+            chestLockedState = GetComponent<ChestLockedState>();
+            chestUnlockingState = GetComponent<ChestUnlockingState>();
+            chestOpenedState = GetComponent<ChestOpenedState>();
+        }
+
         private void Start()
         {
             imageHolder.sprite = chestClosedImage;
+            ChangeChestState(chestLockedState);
         }
 
         public void SetChestController(ChestController _chestController)
@@ -22,9 +44,83 @@ namespace ChestSystem.Chest
             chestController = _chestController;
         }
 
+        public GameObject GetLockedPanel()
+        {
+            return lockedPanel;
+        }
+
+        public GameObject GetUnlockingPanel()
+        {
+            return unlockingPanel;
+        }
+
+        public GameObject GetOpenedPanel()
+        {
+            return chestOpenedPanel;
+        }
+
+        public Image GetImageHolder()
+        {
+            return imageHolder;
+        }
+
+        public Sprite GetChestOpenedImage()
+        {
+            return chestOpenedImage;
+        }
+
+        public TMP_Text GetTimerText()
+        {
+            return timerText;
+        }
+
+        public TMP_Text GetGemCountText()
+        {
+            return gemCountText;
+        }
+
+        public ChestRewards GetChestRewardsFromController()
+        {
+            return chestController.GetChestRewards();
+        }
+
+        public float GetTimeToOpenChest()
+        {
+            return chestController.GetTimeToOpen();
+        }
+
         public void ClickedOnChest()
         {
-            chestController.OpenChest();
+            currentChestState.OnChestClick();
+        }
+
+        public void ChestCollected()
+        {
+            chestController.ChestOpened();
+        }
+
+        public bool GetChestUnlockProcess()
+        {
+            return chestController.GetChestUnlockProcess();
+        }
+
+        public void SetChestUnlockProcess(bool isUnlocking)
+        {
+            chestController.SetChestUnlockProcess(isUnlocking);
+        }
+
+        public void ChangeChestState(ChestState newChestState)
+        {
+            if (currentChestState != null)
+                currentChestState.OnStateExit();
+
+            currentChestState = newChestState;
+            currentChestState.OnStateEnter();
+        }
+
+        private void Update()
+        {
+            currentChestState.Tick();
         }
     }
 }
