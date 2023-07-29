@@ -37,6 +37,8 @@ namespace ChestSystem.Chest
         {
             float minutes = Mathf.FloorToInt((timeToUnlock + 1) / 60);
             gemCost = Mathf.CeilToInt(minutes / 10);
+            if (gemCost == 0)
+                gemCost = 1;
         }
 
         public override void OnStateEnter()
@@ -74,8 +76,6 @@ namespace ChestSystem.Chest
             EventService.Instance.OnUnlockWithGems -= GemsBasedUnlock;
             EventService.Instance.OnUnlockWithTimer -= TimerBasedUnlock;
 
-            Debug.Log("Immediate unlock with gems!");
-
             if (CurrencyService.Instance.RemoveGems(gemCost))
                 chestView.ChangeChestState(chestView.chestOpenedState);
             else
@@ -91,8 +91,13 @@ namespace ChestSystem.Chest
                 UnlockChest();
             else if (chestView.CheckIfChestAlreadyInQueue())
                 EventService.Instance.InvokeOnQueueContainsChest();
+            else if (chestView.CheckIfQueueIsFull())
+                EventService.Instance.InvokeOnChestQueueFull();
             else
+            {
+                chestView.EnableQueueText();
                 chestView.AddChestToQueue();
+            }
         }
     }
 }

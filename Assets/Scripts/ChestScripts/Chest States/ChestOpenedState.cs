@@ -25,8 +25,6 @@ namespace ChestSystem.Chest
         {
             base.OnStateEnter();
 
-            Debug.Log("Opened state enter!");
-
             EventService.Instance.InvokeOnOpenNextChestInQueue();
             chestOpenedPanel.SetActive(true);
         }

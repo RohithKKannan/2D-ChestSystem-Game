@@ -67,12 +67,15 @@ namespace ChestSystem.Chest
             chestUnlockingInProcess = isUnlocking;
         }
 
+        public bool CheckIfQueueIsFull()
+        {
+            return chestQueue.Count == queueLength;
+        }
+
         public void AddChestToQueue(ChestController chestController)
         {
             if (chestQueue.Count < queueLength)
                 chestQueue.Enqueue(chestController);
-            else
-                EventService.Instance.InvokeOnChestQueueFull();
         }
 
         public bool CheckIfChestAlreadyInQueue(ChestController chestController)
@@ -82,8 +85,6 @@ namespace ChestSystem.Chest
 
         public void OpenNextChestInQueue()
         {
-            Debug.Log("Chest Queue count : " + chestQueue.Count);
-
             if (chestQueue.Count == 0)
                 return;
 

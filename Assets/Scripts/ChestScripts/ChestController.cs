@@ -54,6 +54,11 @@ namespace ChestSystem.Chest
             return ChestService.Instance.CheckIfChestAlreadyInQueue(this);
         }
 
+        public bool CheckIfQueueIsFull()
+        {
+            return ChestService.Instance.CheckIfQueueIsFull();
+        }
+
         public void ChangeChestStateToUnlocking()
         {
             chestView.ChangeChestState(chestView.chestUnlockingState);

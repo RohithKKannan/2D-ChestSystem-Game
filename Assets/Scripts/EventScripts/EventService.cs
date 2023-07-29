@@ -24,17 +24,14 @@ namespace ChestSystem.Events
         public event Action<int> OnCheckConfirmGemsUnlock;
         public event Action OnConfirmUnlock;
         public event Action OnDenyUnlock;
-        public event Action OnInsufficientGems;
         public event Action<int, int> OnRewardReceived;
         public event Action OnRewardAccepted;
         public event Action OnErrorAlreadyUnlocking;
         public event Action OnUnlockWithTimer;
         public event Action OnUnlockWithGems;
-        public event Action OnSlotsAreFull;
         public event Action OnOpenNextChestInQueue;
-        public event Action OnQueueContainsChest;
-        public event Action OnChestQueueFull;
         public event Action OnChestQueueEmpty;
+        public event Action<string> OnOkayPopUp;
 
         public void InvokeOnCreateChest(Transform chestHolder)
         {
@@ -73,7 +70,7 @@ namespace ChestSystem.Events
 
         public void InvokeOnInsufficientGems()
         {
-            OnInsufficientGems?.Invoke();
+            OnOkayPopUp?.Invoke("Insufficient Gems!");
         }
 
         public void InvokeOnRewardReceived(int coinCount, int gemCount)
@@ -103,7 +100,7 @@ namespace ChestSystem.Events
 
         public void InvokeOnSlotsAreFull()
         {
-            OnSlotsAreFull?.Invoke();
+            OnOkayPopUp?.Invoke("Slots are full!");
         }
 
         public void InvokeOnOpenNextChestInQueue()
@@ -113,17 +110,22 @@ namespace ChestSystem.Events
 
         public void InvokeOnQueueContainsChest()
         {
-            OnQueueContainsChest?.Invoke();
+            OnOkayPopUp?.Invoke("Chest already in queue!");
         }
 
         public void InvokeOnChestQueueFull()
         {
-            OnChestQueueFull?.Invoke();
+            OnOkayPopUp?.Invoke("Queue is full!");
         }
 
         public void InvokeOnChestQueueEmpty()
         {
             OnChestQueueEmpty?.Invoke();
+        }
+
+        public void InvokeOnOkayPopUp(string text)
+        {
+            OnOkayPopUp?.Invoke(text);
         }
     }
 }

@@ -38,8 +38,6 @@ namespace ChestSystem.Chest
         {
             base.OnStateExit();
 
-            Debug.Log("Unlocking state exit!");
-
             chestView.SetChestUnlockProcess(false);
             unlockingPanel.SetActive(false);
         }
@@ -65,7 +63,6 @@ namespace ChestSystem.Chest
         {
             if (CurrencyService.Instance.RemoveGems(gemCost))
             {
-                Debug.Log("Chest unlocking -> unlock with gems!");
                 UnlockChest();
             }
             else
@@ -102,6 +99,8 @@ namespace ChestSystem.Chest
             time += 1;
             float minutes = Mathf.FloorToInt(time / 60);
             gemCost = Mathf.CeilToInt(minutes / 10);
+            if (gemCost == 0)
+                gemCost = 1;
         }
 
         private void SetGemCostText()
