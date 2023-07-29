@@ -65,6 +65,11 @@ namespace ChestSystem.Chest
             return imageHolder;
         }
 
+        public Sprite GetChestClosedImage()
+        {
+            return chestClosedImage;
+        }
+
         public Sprite GetChestOpenedImage()
         {
             return chestOpenedImage;
@@ -113,6 +118,12 @@ namespace ChestSystem.Chest
         public void EnableQueueText()
         {
             inQueueText.SetActive(true);
+        }
+
+        public void DisableQueueText()
+        {
+            if (inQueueText.activeInHierarchy)
+                inQueueText.SetActive(false);
         }
 
         public void AddChestToQueue()
